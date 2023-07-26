@@ -2,6 +2,7 @@ import pathlib
 import os
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
+from cassandra.cqlengine.connection import register_connection, set_default_connection
 from dotenv import load_dotenv 
 
 # load env variables
@@ -23,7 +24,10 @@ def get_cluster():
     return Cluster(cloud=cloud_config, auth_provider=auth_provider)
 
 def get_session():
-    return get_cluster().connect()
+    session = get_cluster().connect()
+    register_connection(str(session), session=session)
+    set_default_connection(srt(session))
+    return session
 
 session = get_session()
 row = session.execute("select release_version from system.local").one()
