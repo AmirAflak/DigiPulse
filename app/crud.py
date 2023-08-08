@@ -14,3 +14,8 @@ def create_entry(data: dict):
 def create_scrape_entry(data: dict):
     data['uuid'] = uuid.uuid1()
     return ProductScrapeEvent.create(**data)
+
+def add_scrape_event(data: dict):
+    product = create_entry(data)
+    scrape_obj = create_scrape_entry(data)
+    return product, scrape_obj
