@@ -27,3 +27,6 @@ def read_index():
 def products_list_view():
     return list(Product.objects().all())
 
+@app.get("/products/{dkp}")
+def products_detail_view(dkp):
+    return dict(Product.objects().get(dkp=dkp))
