@@ -13,7 +13,7 @@ session = None
 @app.on_event("startup")
 def on_startup():
     global session
-    session = db.get_session()
+    session = get_session()
     sync_table(Product)
     sync_table(ProductScrapeEvent)
 
@@ -21,4 +21,7 @@ def on_startup():
 def read_index():
     return {"hello": "world", "name": settings.name}
 
+@app.get("/products")
+def products_list_view():
+    return {"results": list(Product.objects().all())}
 
