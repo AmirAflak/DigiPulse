@@ -30,5 +30,6 @@ def products_list_view():
 @app.get("/products/{dkp}")
 def products_detail_view(dkp):
     res = dict(Product.objects().get(dkp=dkp))
-    res['events'] = list(ProductScrapeEvent.objects().filter(dkp=dkp))
+    events_list = list(ProductScrapeEvent.objects().filter(dkp=dkp))
+    res['events'] = [ProductScrapeEventDetailSchema(**x )for x in events_list]
     return res
