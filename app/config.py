@@ -1,13 +1,13 @@
 from pydantic import BaseSetting, Field   
-from functool import lru_cache
+from functools import lru_cache
 import os
 
-if not os.getenv("CQLENG_ALLOW_SCHEMA_MANAGEMENT"):
-    os.getenv("CQLENG_ALLOW_SCHEMA_MANAGEMENT") = "1"
+if os.getenv("CQLENG_ALLOW_SCHEMA_MANAGEMENT") is None:
+    os.environ["CQLENG_ALLOW_SCHEMA_MANAGEMENT"] = "1"
     
-
+    
 class Settings(BaseSetting):
-    name: str = Field(..., env=PROJ_NAME)
+    name: str = Field(..., env=PROJ_NAME) 
     db_client_id: str = Field(..., env="ASTRA_CLIENT_ID")
     db_client_secret: str = Field(..., env="ASTRA_CLIENT_SECRET")
     
