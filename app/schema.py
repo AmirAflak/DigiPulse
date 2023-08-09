@@ -12,3 +12,9 @@ class ProductScrapeEventSchema(BaseModel):
     dkp: str
     title: Optional[str]
     
+class ProductScrapeEventDetailSchema(BaseModel):
+    asin: str
+    title: Optional[str]
+    
+
+    
