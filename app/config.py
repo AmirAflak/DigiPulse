@@ -6,3 +6,6 @@ class Settings(BaseSetting):
     
     class Config:
         env_file = ".env"
+        
+def get_settings():
+    return Settings()
