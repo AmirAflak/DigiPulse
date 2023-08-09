@@ -1,5 +1,7 @@
 from fastapi import FastAPI
+from typing import List
 from cassandra.cqlengine.management import sync_table
+from .schema import ProductSchema
 from .config import get_settings
 from .db import get_session
 from .models import Product, ProductScrapeEvent
@@ -21,7 +23,7 @@ def on_startup():
 def read_index():
     return {"hello": "world", "name": settings.name}
 
-@app.get("/products")
+@app.get("/products", response_model=List[ProductSchema])
 def products_list_view():
-    return {"results": list(Product.objects().all())}
+    return list(Product.objects().all())
 
