@@ -29,4 +29,6 @@ def products_list_view():
 
 @app.get("/products/{dkp}")
 def products_detail_view(dkp):
-    return dict(Product.objects().get(dkp=dkp))
+    res = dict(Product.objects().get(dkp=dkp))
+    res['events'] = list(ProductScrapeEvent.objects().filter(dkp=dkp))
+    return res
