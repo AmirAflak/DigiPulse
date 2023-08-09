@@ -1,13 +1,14 @@
 from pydantic import BaseModel
+from typing import Optional
 from uuid import UUID
 
 class ProductSchema(BaseModel):
     dkp: str
-    title: str
+    title: Optional[str]
     
     
 class ProductScrapeEventSchema(BaseModel):
     uuid: UUID
     dkp: str
-    title: str
+    title: Optional[str]
     
