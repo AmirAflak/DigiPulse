@@ -1,5 +1,10 @@
 from pydantic import BaseSetting, Field   
 from functool import lru_cache
+import os
+
+if not os.getenv("CQLENG_ALLOW_SCHEMA_MANAGEMENT"):
+    os.getenv("CQLENG_ALLOW_SCHEMA_MANAGEMENT") = "1"
+    
 
 class Settings(BaseSetting):
     db_client_id: str = Field(..., env="ASTRA_CLIENT_ID")
