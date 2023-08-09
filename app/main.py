@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from typing import List
 from cassandra.cqlengine.management import sync_table
-from .schema import ProductSchema
+from .schema import ProductSchema, ProductScrapeEventDetailSchema
 from .config import get_settings
 from .db import get_session
 from .models import Product, ProductScrapeEvent
