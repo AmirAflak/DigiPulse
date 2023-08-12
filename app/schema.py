@@ -11,10 +11,12 @@ class ProductScrapeEventSchema(BaseModel):
     uuid: UUID
     dkp: str
     title: Optional[str]
+    price_str: Optional[str]
     
 class ProductScrapeEventDetailSchema(BaseModel):
-    asin: str
+    dkp: str
     title: Optional[str]
+    price_str: Optional[str]
     
 
     
