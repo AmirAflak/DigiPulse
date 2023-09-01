@@ -1,5 +1,6 @@
 from pydantic import BaseModel, root_validator
 from typing import Optional, Any
+from .utils import uuid1_time_to_datetime
 from uuid import UUID
 
 class ProductSchema(BaseModel):
@@ -21,7 +22,7 @@ class ProductScrapeEventDetailSchema(BaseModel):
     
     @root_validator(pre=True)
     def extra_create_time_from_uuid(cls, values):
-        values['created'] = values['uuid']
+        values['created'] = uuid1_time_to_datetime(values['uuid'].time)
         return values
     
     
