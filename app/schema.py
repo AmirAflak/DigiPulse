@@ -1,5 +1,5 @@
-from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel, root_validator
+from typing import Optional, Any
 from uuid import UUID
 
 class ProductSchema(BaseModel):
@@ -17,6 +17,13 @@ class ProductScrapeEventDetailSchema(BaseModel):
     dkp: str
     title: Optional[str]
     price_str: Optional[str]
+    created: Optional[Any] = None
+    
+    @root_validator(pre=True)
+    def extra_create_time_from_uuid(cls, values):
+        values['created'] = values['uuid']
+        return values
+    
     
 
     
