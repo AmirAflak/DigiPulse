@@ -30,6 +30,13 @@ def products_list_view():
 @app.get("/products/{dkp}")
 def products_detail_view(dkp):
     res = dict(Product.objects().get(dkp=dkp))
-    events_list = list(ProductScrapeEvent.objects().filter(dkp=dkp))
-    res['events'] = [ProductScrapeEventDetailSchema(**x )for x in events_list]
+    # events_list = list(ProductScrapeEvent.objects().filter(dkp=dkp))
+    # res['events'] = [ProductScrapeEventDetailSchema(**x )for x in events_list]
+    res['events_url'] = f"/products/{dkp}/events"
     return res
+
+@app.get("/products/{dkp}/events", response_model=List[ProductScrapeEventDetailSchema])
+def products_scrapes_list_view(dkp):
+    return list(ProductScrapeEvent.objects().filter(dkp=dkp).limit(5))
+
+
