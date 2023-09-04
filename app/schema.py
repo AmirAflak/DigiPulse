@@ -6,6 +6,7 @@ from uuid import UUID
 class ProductSchema(BaseModel):
     dkp: str
     title: Optional[str]
+    price_str: Optional[str]
     
     
 class ProductScrapeEventSchema(BaseModel):
