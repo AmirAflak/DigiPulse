@@ -28,7 +28,7 @@ def read_index():
 def products_list_view():
     return list(Product.objects().all())
 
-@app.get("/events/scrape")
+@app.post("/events/scrape")
 def events_scrape_create_view(data: ProductSchema):
     product, _ = add_scrape_event(data.dict())
     return product
