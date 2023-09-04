@@ -5,6 +5,7 @@ from .schema import ProductSchema, ProductScrapeEventDetailSchema
 from .config import get_settings
 from .db import get_session
 from .models import Product, ProductScrapeEvent
+from.crud import add_scrape_event
 
 settings = get_settings()
 
@@ -26,6 +27,11 @@ def read_index():
 @app.get("/products", response_model=List[ProductSchema])
 def products_list_view():
     return list(Product.objects().all())
+
+@app.get("/events/scrape")
+def events_scrape_create_view(data: ProductSchema):
+    product, _ = add_scrape_event(data.dict())
+    return product
 
 @app.get("/products/{dkp}")
 def products_detail_view(dkp):
