@@ -1,0 +1,8 @@
+uvicorn app.main:app --reload
+
+docker run -d -p 27017:27017 -v mongo-data:/data/db --name mongodb mongo
+
+docker run -it --rm -p 6380:6380 redis --port 6380
+echo PING | nc 127.0.0.1 6380
+
+celery --app app.worker.celery_app worker --loglevel INFO
