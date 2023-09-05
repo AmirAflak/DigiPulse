@@ -14,9 +14,6 @@ REDIS_URL = settings.redis_url
 celery_app.conf.broker_url = REDIS_URL
 celery_app.conf.result_backend = REDIS_URL
 
-Product = models.Product
-ProductScrapeEvent = models.ProductScrapeEvent
-
 def celery_on_startup(*args, **kwargs):
     print("Hello from startup")
     # cluster = get_cluster()
