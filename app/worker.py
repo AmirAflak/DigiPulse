@@ -30,3 +30,7 @@ worker_process_init.connect(celery_on_startup)
 @celery_app.task
 def random_task(name):
     print(f"Hello from {name}")
+    
+@celery_app.task 
+def list_products():
+    print(list(Product.objects().all().values_list("dkp", flat=True)))
