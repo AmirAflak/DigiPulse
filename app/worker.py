@@ -15,7 +15,10 @@ celery_app.conf.broker_url = REDIS_URL
 celery_app.conf.result_backend = REDIS_URL
 
 def celery_on_startup(*args, **kwargs):
-    print("Hello from startup")
+    if connection.cluster is not None:
+        connection.cluster.shutdown()
+    if connection.session is not None:
+        connection.session.shutdown()
     # cluster = get_cluster()
     # session = cluster.connect()
     # connection.register_connection(str(session), session=session)
