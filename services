@@ -6,3 +6,5 @@ docker run -it --rm -p 6380:6380 redis --port 6380
 echo PING | nc 127.0.0.1 6380
 
 celery --app app.worker.celery_app worker --loglevel INFO
+celery --app app.worker.celery_app beat --loglevel INFO
+celery --app app.worker.celery_app worker --beat -s celerybeat_schedule --loglevel INFO
