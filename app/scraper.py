@@ -19,5 +19,5 @@ class Scraper:
             options.add_argument(f"user-agent={user_agent}")
             driver = webdriver.Chrome(options=options)
             self.driver = driver
-        return self.drive
+        return self.driver
     
