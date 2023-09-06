@@ -19,16 +19,20 @@ def celery_on_startup(*args, **kwargs):
         connection.cluster.shutdown()
     if connection.session is not None:
         connection.session.shutdown()
-    # cluster = get_cluster()
-    # session = cluster.connect()
-    # connection.register_connection(str(session), session=session)
-    # connection.set_default_connection(str(session))
-    get_session()
+    cluster = get_cluster()
+    session = cluster.connect()
+    connection.register_connection(str(session), session=session)
+    connection.set_default_connection(str(session))
+    # get_session()
     sync_table(Product)
     sync_table(ProductScrapeEvent)
     
 beat_init.connect(celery_on_startup)
 worker_process_init.connect(celery_on_startup)
+
+@celery_app.on_after_configure.connect 
+def setup_periodic_task(sender, *args, **kwargs):
+    sender.add_periodic_task(1, random_task.s("random_task Helloo !!"))
 
 @celery_app.task
 def random_task(name):
