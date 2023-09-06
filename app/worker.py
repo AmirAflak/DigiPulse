@@ -1,5 +1,6 @@
 from celery import Celery
 from celery.signals import beat_init, worker_process_init
+from celery.schedules import crontab
 from cassandra.cqlengine import connection
 from cassandra.cqlengine.management import sync_table
 from .models import Product, ProductScrapeEvent
@@ -32,7 +33,11 @@ worker_process_init.connect(celery_on_startup)
 
 @celery_app.on_after_configure.connect 
 def setup_periodic_task(sender, *args, **kwargs):
-    sender.add_periodic_task(1, random_task.s("random_task Helloo !!"))
+    # sender.add_periodic_task(1, random_task.s("random_task Helloo !!"), expires=10)
+    # sender.add_periodic_task(crontab(hour=8, minute=0, day_of_week=2),
+    #                          random_task.s("random_task Helloo !!"), expires=10)
+    sender.add_periodic_task(crontab(minute="*/5"),
+                             scrape_products.s())
 
 @celery_app.task
 def random_task(name):
@@ -41,3 +46,14 @@ def random_task(name):
 @celery_app.task 
 def list_products():
     print(list(Product.objects().all().values_list("dkp", flat=True)))
+    
+@celery_app.task
+def scrape_dkp(dkp):
+    print(dkp)
+    
+@celery_app.task
+def scrape_products():
+    print("Doing Scraping Job...")
+    q = list(Product.objects().all().values_list("dkp", flat=True))
+    for dkp in q:
+        scrape_dkp.delay(dkp)
