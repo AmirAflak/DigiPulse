@@ -5,7 +5,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.webdriver import WebDriver
 
 def get_user_agent():
-    return UserAgent(verify_ssl=False).random
+    return UserAgent().random
 
 class Scraper:
     driver: WebDriver = None 
