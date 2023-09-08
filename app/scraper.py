@@ -46,7 +46,7 @@ class Scraper:
         if self.endless_scroll:
             current_height = driver.execute_script("return document.body.scrollHeight")
             while True:
-                driver.execute_script("window.scrollTo(0, documnet.body.scrollHeight)")
+                driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
                 time.sleep(self.endless_scroll_time)
                 iter_height = driver.execute_script("return document.body.scrollHeight")
                 if current_height == iter_height:
