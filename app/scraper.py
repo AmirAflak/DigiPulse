@@ -1,6 +1,8 @@
 from dataclasses import dataclass 
 from fake_useragent import UserAgent
 
+from .config import get_settings
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -8,6 +10,9 @@ from selenium.webdriver.chrome.service import Service
 
 import time
 
+settings = get_settings()
+
+DRIVER_PATH = settings.driver_path
 
 def get_user_agent():
     return UserAgent().random
@@ -29,7 +34,7 @@ class Scraper:
             # driver = webdriver.Chrome(options=options)
             
             # Specify the path to your ChromeDriver executable
-            chrome_driver_path = '/home/mehrdad/chromedriver-linux64/chromedriver'
+            chrome_driver_path = DRIVER_PATH
             
             # Update the ChromeDriver executable path and make sure it matches
             # your current Chrome browser version
