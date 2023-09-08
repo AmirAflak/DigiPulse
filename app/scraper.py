@@ -44,20 +44,24 @@ class Scraper:
             self.driver = driver
         return self.driver
     
+    def perform_endless_scroll(self, driver):
+        if driver is not None:
+            if self.endless_scroll:
+                current_height = driver.execute_script("return document.body.scrollHeight")
+                while True:
+                    driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+                    time.sleep(self.endless_scroll_time)
+                    iter_height = driver.execute_script("return document.body.scrollHeight")
+                    if current_height == iter_height:
+                        break
+                    current_height = iter_height
+        return 
+    
     def get(self):
         driver = self.get_driver()
         driver.get(self.url)
-        
-        if self.endless_scroll:
-            current_height = driver.execute_script("return document.body.scrollHeight")
-            while True:
-                driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
-                time.sleep(self.endless_scroll_time)
-                iter_height = driver.execute_script("return document.body.scrollHeight")
-                if current_height == iter_height:
-                    break
-                current_height = iter_height
-                
+        self.perform_endless_scroll(driver)    
+         
         return driver.page_source
                 
     
