@@ -63,7 +63,11 @@ class Scraper:
     def get(self):
         driver = self.get_driver()
         driver.get(self.url)
-        self.perform_endless_scroll(driver)    
+        
+        if self.endless_scroll:
+            self.perform_endless_scroll(driver)  
+        else:
+            time.sleep(10)  
          
         return driver.page_source
     
