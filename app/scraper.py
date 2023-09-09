@@ -73,5 +73,20 @@ class Scraper:
             self.html_obj = BeautifulSoup(html_str, "html.parser") 
         return self.html_obj
     
+    def extract_element_text(self, tag, **kwargs):
+        html_obj = self.get_html_obj()
+        el = html_obj.find(tag, kwargs)
+        if not el:
+            return ''
+        return el.text
+        
+
+        
+
+        
+        
+        
+        
+    
     
     
