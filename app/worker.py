@@ -6,6 +6,9 @@ from cassandra.cqlengine.management import sync_table
 from .models import Product, ProductScrapeEvent
 from .config import get_settings
 from .db import get_cluster, get_session
+from .scraper import Scraper
+from .schema import ProductSchema
+from .crud import add_scrape_event
 
 
 celery_app = Celery(__name__)
@@ -49,7 +52,9 @@ def list_products():
     
 @celery_app.task
 def scrape_dkp(dkp):
-    print(dkp)
+    data = Scraper(dkp=dkp, endless_scroll=True)
+    validated_data = ProductSchema(data)
+    add_scrape_event(validated_data.dict())
     
 @celery_app.task
 def scrape_products():
