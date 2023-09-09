@@ -80,6 +80,19 @@ class Scraper:
             return ''
         return el.text
         
+    def perform_scrape(self):
+        html_obj = self.get_html_obj()
+        
+        dkp = self.extract_element_text("span", **{"class": "text-caption color-400"})
+        price_str = self.extract_element_text("span", **{"class": "color-800 ml-1 text-h4"})
+        title_str = self.extract_element_text("h1", **{"data-testid": "PDP_TITLE"})
+        
+        return {
+            "dkp": dkp,
+            "price_str": price_str,
+            "title_str": title_str
+        }
+        
 
         
 
