@@ -8,7 +8,9 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.service import Service
 
-import time
+from bs4 import BeautifulSoup
+
+import time 
 
 settings = get_settings()
 
@@ -23,6 +25,7 @@ class Scraper:
     driver: WebDriver = None 
     endless_scroll: bool = False 
     endless_scroll_time: int = 5
+    html_obj: BeautifulSoup = None
     
     def get_driver(self):
         if self.driver is None:
@@ -63,5 +66,12 @@ class Scraper:
         self.perform_endless_scroll(driver)    
          
         return driver.page_source
-                
+    
+    def get_html_obj(self):
+        if self.html_obj is None:
+            html_str = self.get()
+            self.html_obj = BeautifulSoup(html_str, "html.parser") 
+        return self.html_obj
+    
+    
     
