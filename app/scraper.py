@@ -91,12 +91,29 @@ class Scraper:
         if not el:
             return ''
         return el.text
+    
+    def _perform_price_selection(self):
+        price_selectors = [
+        "span.color-800.ml-1.text-h4",     # Selector for the first variation
+        "span.text-h4.ml-1.color-800"      # Selector for the second variation
+        ]
+        
+        price_str = None
+        for selector in price_selectors:
+            price_element = self.html_obj.select_one(selector)
+            if price_element:
+                price_str = price_element.text
+                break
+            
+        # Check if the price was found
+        return price_str if price_str else ''
+    
         
     def perform_scrape(self):
         html_obj = self.get_html_obj()
         
         dkp = self.extract_element_text("span", **{"class": "text-caption color-400"})
-        price_str = self.extract_element_text("span", **{"class": "color-800 ml-1 text-h4"})
+        price_str = self._perform_price_selection()
         title_str = self.extract_element_text("h1", **{"data-testid": "PDP_TITLE"})
         
         return {
