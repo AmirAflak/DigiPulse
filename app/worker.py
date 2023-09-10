@@ -53,9 +53,13 @@ def list_products():
 @celery_app.task
 def scrape_dkp(dkp):
     data = Scraper(dkp=dkp, endless_scroll=True).perform_scrape()
-    validated_data = ProductSchema(**data)
-    product, _ = add_scrape_event(validated_data.dict())
-    print(product)
+    try:
+        validated_data = ProductSchema(**data)
+    except:
+        validated_data = None
+    if validated_data is not None:
+        product, _ = add_scrape_event(validated_data.dict())
+        print(product)
     
 @celery_app.task
 def scrape_products():
