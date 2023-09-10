@@ -59,7 +59,7 @@ def scrape_dkp(dkp):
         validated_data = None
     if validated_data is not None:
         product, _ = add_scrape_event(validated_data.dict())
-        print(product)
+        return product
     
 @celery_app.task
 def scrape_products():
