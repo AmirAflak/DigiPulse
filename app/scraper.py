@@ -11,6 +11,7 @@ from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
 
 import time 
+import re
 import string
 
 settings = get_settings()
@@ -23,6 +24,7 @@ def get_user_agent():
 @dataclass
 class Scraper:
     url: str = None
+    fetch_products: bool = False
     dkp: str = None 
     driver: WebDriver = None 
     endless_scroll: bool = False 
@@ -30,11 +32,27 @@ class Scraper:
     html_obj: BeautifulSoup = None
     
     def __post_init__(self):  
-              
-        self.url = f"https://www.digikala.com/product/{self.dkp}"
-        
-        if not self.dkp or not self.url:
-            raise Exception(f"dkp or url is required.")
+        if not self.fetch_products:
+            self.url = f"https://www.digikala.com/product/{self.dkp}"
+            
+            if not self.dkp or not self.url:
+                raise Exception(f"dkp or url is required.")
+            
+        self.endless_scroll = True
+            
+    def fetch_products(self):   
+        soup = self.perform_scrape()   
+        elements_list = soup.find_all('a', {'class': 'd-block pointer pos-relative bg-000 overflow-hidden grow-1 py-3 px-4 px-2-lg h-full-md styles_VerticalProductCard--hover__ud7aD'})  
+        pattern = re.compile(r"/product/([a-zA-Z0-9-]+)/")
+        dkp_list = []
+
+        for element in elements_list:
+            string = element['href']
+            match = pattern.search(string)
+            if match:
+                result = match.group(1)
+                dkp_list.append(result)
+        return dkp_list
     
     def get_driver(self):
         if self.driver is None:
@@ -115,27 +133,27 @@ class Scraper:
     def perform_scrape(self):
         html_obj = self.get_html_obj()
         
-        dkp = self.extract_element_text("span", **{"class": "text-caption color-400"})
-        dkp = dkp.strip() if dkp is not None else None
+        if not self.fetch_products:
+            dkp = self.extract_element_text("span", **{"class": "text-caption color-400"})
+            dkp = dkp.strip() if dkp is not None else None
+            
+            price_str = self._perform_price_selection()
+            
+            title_str = self.extract_element_text("h1", **{"data-testid": "PDP_TITLE"})
+            title_str = title_str.strip() if title_str is not None else None
+            
+            return {
+                "dkp": dkp,
+                "price_str": price_str,
+                "title": title_str
+            }
         
-        price_str = self._perform_price_selection()
+        return html_obj
         
-        title_str = self.extract_element_text("h1", **{"data-testid": "PDP_TITLE"})
-        title_str = title_str.strip() if title_str is not None else None
-        
-        return {
-            "dkp": dkp,
-            "price_str": price_str,
-            "title": title_str
-        }
             
 
             
 
             
             
-            
-            
-        
-        
         
