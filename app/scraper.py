@@ -1,4 +1,5 @@
-from dataclasses import dataclass 
+from dataclasses import dataclass, field
+from typing import List 
 from fake_useragent import UserAgent
 
 from .config import get_settings
@@ -25,7 +26,7 @@ def get_user_agent():
 class Scraper:
     url: str = None
     fetch_products: bool = False
-    dkp_list: list = []
+    dkp_list: List[str] = field(default_factory=list)
     dkp: str = None 
     driver: WebDriver = None 
     endless_scroll: bool = False 
@@ -43,7 +44,6 @@ class Scraper:
             
     def get_products(self):   
         soup = self.html_obj
-        print(self.html_obj)
         elements_list = soup.find_all(
         'a',
         {'class': 'd-block pointer pos-relative bg-000 overflow-hidden grow-1 py-3 px-4 px-2-lg h-full-md styles_VerticalProductCard--hover__ud7aD'}
