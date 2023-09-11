@@ -124,7 +124,7 @@ class Scraper:
         return {
             "dkp": dkp,
             "price_str": price_str,
-            "title_str": title_str
+            "title": title_str
         }
             
 
