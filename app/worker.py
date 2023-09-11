@@ -10,6 +10,11 @@ from .scraper import Scraper
 from .schema import ProductSchema
 from .crud import add_scrape_event
 
+import threading
+
+# thread_local = threading.local()
+
+
 
 celery_app = Celery(__name__)
 settings = get_settings()
@@ -23,16 +28,19 @@ def celery_on_startup(*args, **kwargs):
         connection.cluster.shutdown()
     if connection.session is not None:
         connection.session.shutdown()
+        
     cluster = get_cluster()
     session = cluster.connect()
     connection.register_connection(str(session), session=session)
     connection.set_default_connection(str(session))
-    # get_session()
+    # get_session() 
+    # thread_local.cassandra_session = session
     sync_table(Product)
     sync_table(ProductScrapeEvent)
     
-beat_init.connect(celery_on_startup)
 worker_process_init.connect(celery_on_startup)
+beat_init.connect(celery_on_startup)
+
 
 @celery_app.on_after_configure.connect 
 def setup_periodic_task(sender, *args, **kwargs):
@@ -64,6 +72,7 @@ def scrape_dkp(dkp):
 @celery_app.task
 def scrape_products():
     print("Doing Scraping Job...")
-    q = list(Product.objects().all().values_list("dkp", flat=True))
+    # q = list(Product.objects().all().values_list("dkp", flat=True))
+    q = ['dkp-2271206', 'dkp-749878', 'dkp-11153044']
     for dkp in q:
         scrape_dkp.delay(dkp)
