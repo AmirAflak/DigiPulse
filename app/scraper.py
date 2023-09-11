@@ -153,7 +153,7 @@ class Scraper:
             }
             
         else:
-            self.get_products()
+            return self.get_products()
         
             
 
