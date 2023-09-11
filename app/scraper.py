@@ -11,6 +11,7 @@ from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
 
 import time 
+import string
 
 settings = get_settings()
 
@@ -98,6 +99,8 @@ class Scraper:
         "span.text-h4.ml-1.color-800"      # Selector for the second variation
         ]
         
+        translation_table = str.maketrans('', '', string.punctuation)
+        
         price_str = None
         for selector in price_selectors:
             price_element = self.html_obj.select_one(selector)
@@ -106,7 +109,7 @@ class Scraper:
                 break
             
         # Check if the price was found
-        return price_str if price_str else ''
+        return price_str.translate(translation_table) if price_str is not None else None
     
         
     def perform_scrape(self):
@@ -116,7 +119,6 @@ class Scraper:
         dkp = dkp.strip() if dkp is not None else None
         
         price_str = self._perform_price_selection()
-        price_str = float(price_str.strip().replace(',', '')) if price_str is not None else None
         
         title_str = self.extract_element_text("h1", **{"data-testid": "PDP_TITLE"})
         title_str = title_str.strip() if title_str is not None else None
