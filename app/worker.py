@@ -18,6 +18,7 @@ import threading
 
 celery_app = Celery(__name__)
 settings = get_settings()
+first_time = True
 
 REDIS_URL = settings.redis_url
 celery_app.conf.broker_url = REDIS_URL
@@ -71,8 +72,13 @@ def scrape_dkp(dkp):
     
 @celery_app.task
 def scrape_products():
+    global first_time
     print("Doing Scraping Job...")
-    # q = list(Product.objects().all().values_list("dkp", flat=True))
-    q = ['dkp-2271206', 'dkp-749878', 'dkp-11153044']
-    for dkp in q:
+    if first_time:
+        url = "https://www.digikala.com/search/category-mobile-phone/product-list/"
+        dkp_list = Scraper(url=url, fetch_products=True).perform_scrape()
+        first_time = False
+    else:
+        dkp_list = list(Product.objects().all().values_list("dkp", flat=True))
+    for dkp in dkp_list:
         scrape_dkp.delay(dkp)
