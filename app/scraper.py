@@ -25,6 +25,7 @@ def get_user_agent():
 class Scraper:
     url: str = None
     fetch_products: bool = False
+    dkp_list: list = []
     dkp: str = None 
     driver: WebDriver = None 
     endless_scroll: bool = False 
@@ -40,19 +41,22 @@ class Scraper:
             
         self.endless_scroll = True
             
-    def fetch_products(self):   
-        soup = self.perform_scrape()   
-        elements_list = soup.find_all('a', {'class': 'd-block pointer pos-relative bg-000 overflow-hidden grow-1 py-3 px-4 px-2-lg h-full-md styles_VerticalProductCard--hover__ud7aD'})  
+    def get_products(self):   
+        soup = self.html_obj
+        print(self.html_obj)
+        elements_list = soup.find_all(
+        'a',
+        {'class': 'd-block pointer pos-relative bg-000 overflow-hidden grow-1 py-3 px-4 px-2-lg h-full-md styles_VerticalProductCard--hover__ud7aD'}
+        )
         pattern = re.compile(r"/product/([a-zA-Z0-9-]+)/")
-        dkp_list = []
-
         for element in elements_list:
             string = element['href']
             match = pattern.search(string)
             if match:
                 result = match.group(1)
-                dkp_list.append(result)
-        return dkp_list
+                self.dkp_list.append(result)
+        
+        return self.dkp_list
     
     def get_driver(self):
         if self.driver is None:
@@ -147,8 +151,9 @@ class Scraper:
                 "price_str": price_str,
                 "title": title_str
             }
-        
-        return html_obj
+            
+        else:
+            self.get_products()
         
             
 
