@@ -19,6 +19,7 @@ import threading
 celery_app = Celery(__name__)
 settings = get_settings()
 first_time = True
+products_page_url = "https://www.digikala.com/search/category-mobile-phone/product-list/"
 
 REDIS_URL = settings.redis_url
 celery_app.conf.broker_url = REDIS_URL
@@ -48,8 +49,8 @@ def setup_periodic_task(sender, *args, **kwargs):
     # sender.add_periodic_task(1, random_task.s("random_task Helloo !!"), expires=10)
     # sender.add_periodic_task(crontab(hour=8, minute=0, day_of_week=2),
     #                          random_task.s("random_task Helloo !!"), expires=10)
-    sender.add_periodic_task(crontab(minute="*/5"),
-                             scrape_products.s())
+    sender.add_periodic_task(crontab(minute="*/15"),
+                             scrape_products.s(products_page_url))
 
 @celery_app.task
 def random_task(name):
@@ -71,14 +72,13 @@ def scrape_dkp(dkp):
         return product
     
 @celery_app.task
-def scrape_products():
+def scrape_products(url):
     global first_time
-    print("Doing Scraping Job...")
     if first_time:
-        url = "https://www.digikala.com/search/category-mobile-phone/product-list/"
         dkp_list = Scraper(url=url, fetch_products=True).perform_scrape()
         first_time = False
     else:
         dkp_list = list(Product.objects().all().values_list("dkp", flat=True))
+        
     for dkp in dkp_list:
         scrape_dkp.delay(dkp)
