@@ -113,30 +113,27 @@ class Scraper:
         html_obj = self.get_html_obj()
         
         dkp = self.extract_element_text("span", **{"class": "text-caption color-400"})
-        if dkp is not None: 
-            dkp = dkp.strip()
-            
+        dkp = dkp.strip() if dkp is not None else None
+        
         price_str = self._perform_price_selection()
-        if price_str is not None:
-            price_str = float(price_str.strip().replace(',', ''))
-            
+        price_str = float(price_str.strip().replace(',', '')) if price_str is not None else None
+        
         title_str = self.extract_element_text("h1", **{"data-testid": "PDP_TITLE"})
-        if title_str is not None:
-            title_str = title_str.strip()
+        title_str = title_str.strip() if title_str is not None else None
         
         return {
             "dkp": dkp,
             "price_str": price_str,
             "title_str": title_str
         }
-        
+            
 
-        
+            
 
+            
+            
+            
+            
         
         
         
-        
-    
-    
-    
