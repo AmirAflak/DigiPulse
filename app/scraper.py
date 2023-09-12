@@ -65,13 +65,9 @@ class Scraper:
             options.add_argument("--no-sandbox")
             options.add_argument("--headless")
             options.add_argument(f"user-agent={user_agent}")
-            # driver = webdriver.Chrome(options=options)
             
-            # Specify the path to your ChromeDriver executable
             chrome_driver_path = DRIVER_PATH
-            
-            # Update the ChromeDriver executable path and make sure it matches
-            # your current Chrome browser version
+
             service = Service(chrome_driver_path)
             driver = webdriver.Chrome(service=service, options=options)
             

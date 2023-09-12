@@ -30,9 +30,3 @@ def get_session():
     set_default_connection(str(session))
     return session
 
-# session = get_session()
-# row = session.execute("select release_version from system.local").one()
-# if row:
-#   print(row[0])
-# else:
-#   print("An error occurred.")

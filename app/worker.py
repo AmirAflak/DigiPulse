@@ -5,15 +5,10 @@ from cassandra.cqlengine import connection
 from cassandra.cqlengine.management import sync_table
 from .models import Product, ProductScrapeEvent
 from .config import get_settings
-from .db import get_cluster, get_session
+from .db import get_cluster
 from .scraper import Scraper
 from .schema import ProductSchema
 from .crud import add_scrape_event
-
-import threading
-
-# thread_local = threading.local()
-
 
 
 celery_app = Celery(__name__)
@@ -35,8 +30,6 @@ def celery_on_startup(*args, **kwargs):
     session = cluster.connect()
     connection.register_connection(str(session), session=session)
     connection.set_default_connection(str(session))
-    # get_session() 
-    # thread_local.cassandra_session = session
     sync_table(Product)
     sync_table(ProductScrapeEvent)
     
@@ -46,9 +39,6 @@ beat_init.connect(celery_on_startup)
 
 @celery_app.on_after_configure.connect 
 def setup_periodic_task(sender, *args, **kwargs):
-    # sender.add_periodic_task(1, random_task.s("random_task Helloo !!"), expires=10)
-    # sender.add_periodic_task(crontab(hour=8, minute=0, day_of_week=2),
-    #                          random_task.s("random_task Helloo !!"), expires=10)
     sender.add_periodic_task(crontab(minute="*/15"),
                              scrape_products.s(products_page_url))
 
