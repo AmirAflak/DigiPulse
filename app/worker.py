@@ -14,7 +14,7 @@ from .crud import add_scrape_event
 celery_app = Celery(__name__)
 settings = get_settings()
 first_time = True
-products_page_url = "https://www.digikala.com/search/category-mobile-phone/product-list/"
+PRODUCTS_PAGE_URL = settings.products_page_url
 
 REDIS_URL = settings.redis_url
 celery_app.conf.broker_url = REDIS_URL
