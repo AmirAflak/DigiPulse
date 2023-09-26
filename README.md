@@ -44,8 +44,31 @@ The project enables you to efficiently collect and manage product data from Digi
    uvicorn app.main:app --reload
    ```
    The API should now be accessible at http://localhost:8000.
-  
 
+  
+## Usage
+Once the application is running, you can use the exposed endpoints of the REST API to interact with the database and perform CRUD operations on the product data.
+
+### Screenshots
+These screenshots from the DigiPulse portray the successful implementation of real-time price tracking through API integration and the utilization of Cassandra's robust database capabilities.
+
+* <b>REST API:</b> Implementation of the API for real-time price tracking in the DigiPulse. Through this functionality, users can list various products and keep track of their prices dynamically. The API integration enables seamless communication between the DigiPulse platform and external systems or databases to gather up-to-date pricing information. This real-time price tracking feature enriches the user experience by providing accurate and timely data on product prices, allowing users to make informed decisions.
+
+<br />
+<p align="center">
+  <a href="[https://github.com/AmirAflak/DigiPulse">
+    <img src="images/api.jpg" alt="Logo" width="600" height="300">
+  </a>
+</p>
+<br /> 
+
+* <b>CQL Console:</b> Captures a table in the Cassandra database within the DigiPulse project, as viewed through the DataStax CQL console. Specifically, the table shown reflects the structured data stored in the Cassandra database, which supports the efficient management and retrieval of product-related information. Cassandra's distributed architecture and scalability make it a suitable choice for the DigiPulse project, ensuring reliable and high-performance data storage and retrieval. By utilizing the power of Cassandra, the project gains the ability to handle large volumes of data while maintaining system responsiveness and resilience.<br />
+<br />
+<p align="center">
+  <a href="[https://github.com/AmirAflak/DigiPulse">
+    <img src="images/db.jpg" alt="Logo" width="400" height="400">
+  </a>
+</p>
 
 
 
